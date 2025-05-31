@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentRegistration.Api.Data.Context;
 using StudentRegistration.Api.Models.Entities;
+using StudentRegistration.Api.Models.Requests;
 
 namespace StudentRegistration.Api.Data.Repositories
 {
@@ -13,9 +14,30 @@ namespace StudentRegistration.Api.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Student>> GetAllAsync()
+        public async Task<(IEnumerable<Student> Students, int TotalCount)> GetAllAsync(StudentSearchRequest request)
         {
-            return await _context.Students.ToListAsync();
+            var query = _context.Students.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+            {
+                var searchTerm = request.SearchTerm.ToLower();
+                query = query.Where(s =>
+                    s.FirstName.ToLower().Contains(searchTerm) ||
+                    s.LastName.ToLower().Contains(searchTerm) ||
+                    s.Mobile.Contains(searchTerm) ||
+                    s.Email.ToLower().Contains(searchTerm) ||
+                    s.NIC.Contains(searchTerm) ||
+                    (s.Address != null && s.Address.ToLower().Contains(searchTerm)));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var students = await query
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync();
+
+            return (students, totalCount);
         }
 
         public async Task<Student> GetByIdAsync(int id)

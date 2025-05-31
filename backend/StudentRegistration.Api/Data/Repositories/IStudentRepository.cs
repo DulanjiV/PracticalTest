@@ -1,10 +1,11 @@
 ﻿using StudentRegistration.Api.Models.Entities;
+using StudentRegistration.Api.Models.Requests;
 
 namespace StudentRegistration.Api.Data.Repositories
 {
     public interface IStudentRepository
     {
-        Task<IEnumerable<Student>> GetAllAsync(); 
+        Task<(IEnumerable<Student> Students, int TotalCount)> GetAllAsync(StudentSearchRequest request);
         Task<Student> GetByIdAsync(int id);
         Task<Student> CreateAsync(Student student);
         Task<Student> UpdateAsync(Student student);

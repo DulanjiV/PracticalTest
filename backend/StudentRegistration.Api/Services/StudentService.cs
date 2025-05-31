@@ -1,6 +1,7 @@
 ﻿using StudentRegistration.Api.Data.Repositories;
 using StudentRegistration.Api.Models.DTOs;
 using StudentRegistration.Api.Models.Entities;
+using StudentRegistration.Api.Models.Requests;
 
 namespace StudentRegistration.Api.Services
 {
@@ -13,9 +14,22 @@ namespace StudentRegistration.Api.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Student>> GetAllStudentsAsync()
+        public async Task<PagedResultDto<Student>> GetAllStudentsAsync(StudentSearchRequest request)
         {
-            return await _repository.GetAllAsync();
+            var (students, totalCount) = await _repository.GetAllAsync(request);
+
+            var totalPages = (int)Math.Ceiling((double)totalCount / request.PageSize);
+
+            return new PagedResultDto<Student>
+            {
+                Data = students.ToList(),
+                TotalRecords = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = request.Page,
+                PageSize = request.PageSize,
+                HasNextPage = request.Page < totalPages,
+                HasPreviousPage = request.Page > 1
+            };
         }
 
         public async Task<Student> GetStudentByIdAsync(int id)
