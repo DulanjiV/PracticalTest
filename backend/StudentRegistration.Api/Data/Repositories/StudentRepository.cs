@@ -32,6 +32,8 @@ namespace StudentRegistration.Api.Data.Repositories
 
             var totalCount = await query.CountAsync();
 
+            query = ApplySorting(query, request.SortBy ?? "FirstName", request.SortDescending);
+
             var students = await query
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
@@ -70,6 +72,20 @@ namespace StudentRegistration.Api.Data.Repositories
             _context.Students.Remove(student);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        private static IQueryable<Student> ApplySorting(IQueryable<Student> query, string sortBy, bool descending)
+        {
+            return sortBy.ToLower() switch
+            {
+                "firstname" => descending ? query.OrderByDescending(s => s.FirstName) : query.OrderBy(s => s.FirstName),
+                "lastname" => descending ? query.OrderByDescending(s => s.LastName) : query.OrderBy(s => s.LastName),
+                "email" => descending ? query.OrderByDescending(s => s.Email) : query.OrderBy(s => s.Email),
+                "mobile" => descending ? query.OrderByDescending(s => s.Mobile) : query.OrderBy(s => s.Mobile),
+                "nic" => descending ? query.OrderByDescending(s => s.NIC) : query.OrderBy(s => s.NIC),
+                "dateofbirth" => descending ? query.OrderByDescending(s => s.DateOfBirth) : query.OrderBy(s => s.DateOfBirth),
+                _ => descending ? query.OrderByDescending(s => s.FirstName) : query.OrderBy(s => s.FirstName)
+            };
         }
     }
 }

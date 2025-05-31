@@ -19,6 +19,13 @@ export class StudentService {
     if (request.searchTerm) {
       params = params.set('searchTerm', request.searchTerm);
     }
+    if (request.sortBy) {
+      params = params.set('sortBy', request.sortBy);
+    }
+
+    if (request.sortDescending !== undefined) {
+      params = params.set('sortDescending', request.sortDescending.toString());
+    }
 
     return this.http.get<PagedResultDto<Student>>(this.apiUrl, { params }).pipe(
       map(result => ({
@@ -27,15 +34,6 @@ export class StudentService {
           ...student,
           dateOfBirth: new Date(student.dateOfBirth)
         }))
-      }))
-    );
-  }
-
-  getStudent(id: number): Observable<Student> {
-    return this.http.get<Student>(`${this.apiUrl}/${id}`).pipe(
-      map(student => ({
-        ...student,
-        dateOfBirth: new Date(student.dateOfBirth)
       }))
     );
   }

@@ -43,4 +43,6 @@ export interface StudentSearchRequest {
   searchTerm?: string;
   page: number;
   pageSize: number;
+  sortBy?: string;
+  sortDescending?: boolean;
 }

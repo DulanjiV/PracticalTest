@@ -43,10 +43,12 @@ export class StudentListComponent implements OnInit {
   searchTerm: string = '';
   loading: boolean = false;
 
-  // Pagination
   totalRecords: number = 0;
   pageSize: number = 10;
   currentPage: number = 1;
+
+  sortBy: string = '';
+  sortDescending: boolean = false;
 
   constructor(
     private studentService: StudentService,
@@ -62,7 +64,9 @@ export class StudentListComponent implements OnInit {
     const request: StudentSearchRequest = {
       searchTerm: this.searchTerm || undefined,
       page: this.currentPage,
-      pageSize: this.pageSize
+      pageSize: this.pageSize,
+      sortBy: this.sortBy,
+      sortDescending: this.sortDescending
     };
 
     this.studentService.getStudents(request).subscribe({
@@ -189,6 +193,7 @@ export class StudentListComponent implements OnInit {
           error: (error) => {
             console.error('Error deleting student:', error);
             this.showAlert('Error', 'Error deleting student. Please try again.', 'error');
+            this.loading = false;
           }
         });
       }
@@ -207,7 +212,23 @@ export class StudentListComponent implements OnInit {
     });
   }
 
-  isRowSelected(student: Student): boolean {
+isRowSelected(student: Student): boolean {
     return this.selectedStudent?.id === student.id;
+  }
+
+  sortData(column: string): void {
+    if (this.sortBy === column) {
+      this.sortDescending = !this.sortDescending;
+    } else {
+      this.sortBy = column;
+      this.sortDescending = false;
+    }
+    this.currentPage = 1;
+    this.loadStudents();
+  }
+
+  getSortIcon(column: string): string {
+    if (this.sortBy !== column) return 'unfold_more';
+    return this.sortDescending ? 'keyboard_arrow_down' : 'keyboard_arrow_up';
   }
 }
