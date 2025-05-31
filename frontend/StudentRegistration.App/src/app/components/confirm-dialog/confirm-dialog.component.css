@@ -1,0 +1,32 @@
+.h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mat-dialog-content {
+    min-width: 300px;
+}
+
+.mat-dialog-actions {
+    padding: 16px 24px;
+    margin: 0;
+}
+
+.success-icon {
+    color: #4caf50 !important;
+}
+
+.error-icon {
+    color: #f44336 !important;
+}
+
+.success-button {
+    background-color: #4caf50 !important;
+    color: white !important;
+}
+
+.error-button {
+    background-color: #f44336 !important;
+    color: white !important;
+}

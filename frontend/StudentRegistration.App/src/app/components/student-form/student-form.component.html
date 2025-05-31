@@ -1,0 +1,74 @@
+<h2 mat-dialog-title>{{isEdit ? 'Edit Student' : 'Add New Student'}}</h2>
+
+<form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" required>
+        <mat-error *ngIf="studentForm.get('firstName')?.invalid">
+          First Name is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" required>
+        <mat-error *ngIf="studentForm.get('lastName')?.invalid">
+          Last Name is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Mobile</mat-label>
+        <input matInput formControlName="mobile" required>
+        <mat-error *ngIf="studentForm.get('mobile')?.invalid">
+          Mobile is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>NIC</mat-label>
+        <input matInput formControlName="nic" required>
+        <mat-error *ngIf="studentForm.get('nic')?.invalid">
+          NIC is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" required>
+      <mat-error *ngIf="studentForm.get('email')?.invalid">
+        Email is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Date of Birth</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="studentForm.get('dateOfBirth')?.invalid">
+        Date of Birth is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Address</mat-label>
+      <textarea matInput formControlName="address" rows="3"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()" [disabled]="loading">
+      Cancel
+    </button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="studentForm.invalid || loading">
+      <mat-icon *ngIf="loading">hourglass_empty</mat-icon>
+      {{isEdit ? 'Update' : 'Create'}}
+    </button>
+  </mat-dialog-actions>
+</form>
