@@ -10,5 +10,6 @@ namespace StudentRegistration.Api.Data.Repositories
         Task<Student> CreateAsync(Student student);
         Task<Student> UpdateAsync(Student student);
         Task<bool> DeleteAsync(int id);
+        Task<bool> EmailExistsAsync(string email, int? excludeId = null);
     }
 }

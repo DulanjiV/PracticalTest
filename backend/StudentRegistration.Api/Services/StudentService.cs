@@ -39,6 +39,10 @@ namespace StudentRegistration.Api.Services
 
         public async Task<Student> CreateStudentAsync(CreateStudentDto createStudentDto)
         {
+            if (await _repository.EmailExistsAsync(createStudentDto.Email))
+            {
+                throw new Exception("Student email already exists.");
+            }
             var student = new Student
             {
                 FirstName = createStudentDto.FirstName,
@@ -71,7 +75,11 @@ namespace StudentRegistration.Api.Services
             var existingStudent = await _repository.GetByIdAsync(id);
             if (existingStudent == null)
             {
-                return null;
+                throw new Exception("Student not found with the provided ID.");
+            }
+            if (await _repository.EmailExistsAsync(updateStudentDto.Email, id))
+            {
+                throw new Exception("Student email already exists.");
             }
 
             existingStudent.FirstName = updateStudentDto.FirstName;

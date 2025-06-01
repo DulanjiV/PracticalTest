@@ -20,48 +20,79 @@ namespace StudentRegistration.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllStudents([FromQuery] StudentSearchRequest request)
         {
-            var result = await _service.GetAllStudentsAsync(request);
-            return Ok(result);
+            try
+            {
+                var result = await _service.GetAllStudentsAsync(request);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentById(int id)
         {
-            var student = await _service.GetStudentByIdAsync(id);
-            if (student == null)
+            try
             {
-                return NotFound($"Student with ID {id} not found.");
-            }
+                var student = await _service.GetStudentByIdAsync(id);
+                if (student == null) 
+                    return NotFound($"Student with ID {id} not found.");
 
-            return Ok(student);
+                return Ok(student);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateStudent(CreateStudentDto createStudentDto)
         {
-            return Ok(await _service.CreateStudentAsync(createStudentDto));
+            try
+            {
+                return Ok(await _service.CreateStudentAsync(createStudentDto));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateStudent(int id, UpdateStudentDto updateStudentDto)
         {
-            var student = await _service.UpdateStudentAsync(id, updateStudentDto);
-            if (student == null)
+            try
             {
-                return NotFound($"Student with ID {id} not found.");
+                var student = await _service.UpdateStudentAsync(id, updateStudentDto);
+                if (student == null)
+                    return NotFound($"Student with ID {id} not found.");
+
+                return Ok(student);
             }
-            return Ok(student);
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStudent(int id)
         {
-            var student = await _service.DeleteStudentAsync(id);
-            if (student == null)
+            try
             {
-                return NotFound($"Student with ID {id} not found.");
+                var student = await _service.DeleteStudentAsync(id);
+                if (!student)
+                    return NotFound($"Student with ID {id} not found.");
+
+                return Ok(new { message = "Deleted successfully" });
             }
-            return Ok(student);
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

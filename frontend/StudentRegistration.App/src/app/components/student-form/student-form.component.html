@@ -23,7 +23,7 @@
             Choose
           </button>
           <small class="file-info" *ngIf="getImageDisplayName()">{{getImageDisplayName()}}</small>
-          <small class="file-info" >Max size: 5MB. Formats: JPEG, PNG, GIF</small>
+          <small class="file-info">Max size: 5MB. Formats: JPEG, PNG, GIF</small>
         </div>
       </div>
     </div>
@@ -31,7 +31,7 @@
     <div class="form-row">
       <mat-form-field appearance="outline" class="half-width">
         <mat-label>First Name</mat-label>
-        <input matInput formControlName="firstName" required>
+        <input matInput formControlName="firstName" maxlength="100" required>
         <mat-error *ngIf="studentForm.get('firstName')?.invalid">
           First Name is required
         </mat-error>
@@ -39,7 +39,7 @@
 
       <mat-form-field appearance="outline" class="half-width">
         <mat-label>Last Name</mat-label>
-        <input matInput formControlName="lastName" required>
+        <input matInput formControlName="lastName" maxlength="100" required>
         <mat-error *ngIf="studentForm.get('lastName')?.invalid">
           Last Name is required
         </mat-error>
@@ -49,30 +49,23 @@
     <div class="form-row">
       <mat-form-field appearance="outline" class="half-width">
         <mat-label>Mobile</mat-label>
-        <input matInput formControlName="mobile" required>
+        <input matInput formControlName="mobile" maxlength="16" (input)="onMobileInput($event)" required>
         <mat-error *ngIf="studentForm.get('mobile')?.invalid">
           Mobile is required
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="half-width">
-        <mat-label>NIC</mat-label>
-        <input matInput formControlName="nic" required>
-        <mat-error *ngIf="studentForm.get('nic')?.invalid">
-          NIC is required
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="form-row">
-      <mat-form-field appearance="outline" class="full-width">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" required>
+        <input matInput formControlName="email" maxlength="255" required>
         <mat-error *ngIf="studentForm.get('email')?.invalid">
           Email is required
         </mat-error>
       </mat-form-field>
+    </div>
 
-      <mat-form-field appearance="outline" class="full-width">
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
         <mat-label>Date of Birth</mat-label>
         <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -81,10 +74,19 @@
           Date of Birth is required
         </mat-error>
       </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>NIC</mat-label>
+        <input matInput formControlName="nic" maxlength="12" required>
+        <mat-error *ngIf="studentForm.get('nic')?.invalid">
+          NIC is required
+        </mat-error>
+      </mat-form-field>
     </div>
+
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Address</mat-label>
-      <textarea matInput formControlName="address" rows="3"></textarea>
+      <textarea matInput formControlName="address" rows="3" maxlength="500"></textarea>
     </mat-form-field>
   </mat-dialog-content>
 

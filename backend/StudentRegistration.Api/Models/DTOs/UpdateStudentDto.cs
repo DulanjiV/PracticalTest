@@ -13,7 +13,7 @@ namespace StudentRegistration.Api.Models.DTOs
         public string LastName { get; set; } = string.Empty;
 
         [Required]
-        [MaxLength(20)]
+        [MaxLength(16)]
         public string Mobile { get; set; } = string.Empty;
 
         [Required]
@@ -22,14 +22,14 @@ namespace StudentRegistration.Api.Models.DTOs
         public string Email { get; set; } = string.Empty;
 
         [Required]
-        [MaxLength(20)]
+        [MaxLength(12)]
         public string NIC { get; set; } = string.Empty;
 
         [Required]
         public DateTime DateOfBirth { get; set; }
 
         [MaxLength(500)]
-        public string Address { get; set; } = string.Empty;
+        public string? Address { get; set; } = string.Empty;
 
         public string? ProfileImageBase64 { get; set; }
 

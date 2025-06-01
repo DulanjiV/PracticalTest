@@ -39,6 +39,7 @@ export class StudentFormComponent implements OnInit {
   currentImageUrl: string = '';
   maxFileSize: number = 5 * 1024 * 1024;
   allowedTypes: string[] = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+  today = new Date();
 
   constructor(
     private fb: FormBuilder,
@@ -61,13 +62,33 @@ export class StudentFormComponent implements OnInit {
     }
   }
 
+  onMobileInput(event: any): void {
+    const input = event.target;
+    const value = input.value;
+    const number = value.replace(/[^+0-9]/g, '');
+    let finalValue = number;
+
+    if (number.includes('+')) {
+      const plusIndex = number.indexOf('+');
+      if (plusIndex === 0) {
+        finalValue = '+' + number.substring(1).replace(/\+/g, '');
+      } else {
+        finalValue = number.replace(/\+/g, '');
+      }
+    }
+    if (finalValue !== value) {
+      this.studentForm.get('mobile')?.setValue(finalValue);
+      input.value = finalValue;
+    }
+  }
+
   private createForm(): FormGroup {
     return this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(100)]],
       lastName: ['', [Validators.required, Validators.maxLength(100)]],
-      mobile: ['', [Validators.required, Validators.maxLength(20)]],
+      mobile: ['', [Validators.required, Validators.maxLength(16)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
-      nic: ['', [Validators.required, Validators.maxLength(20)]],
+      nic: ['', [Validators.required, Validators.maxLength(12)]],
       dateOfBirth: ['', Validators.required],
       address: ['', Validators.maxLength(500)]
     });
@@ -150,6 +171,15 @@ export class StudentFormComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
+    const formValue = this.studentForm.value;
+    if (formValue.dateOfBirth >= this.today) {
+      this.showAlert('Invalid Date', 'Date of Birth cannot be in the future.', 'error');
+      return;
+    }
+    if (!this.validateNicWithDobSimple(formValue.nic, formValue.dateOfBirth)) {
+      this.showAlert('NIC Mismatch', 'The NIC number does not match the date of birth year.', 'error');
+      return;
+    }
     if (this.studentForm.valid) {
       this.loading = true;
       const formValue = this.studentForm.value;
@@ -190,7 +220,7 @@ export class StudentFormComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error updating student:', error);
-            this.showAlert('Update Failed', 'Error updating student. Please try again.', 'error');
+            this.showAlert('Update Failed', error?.error?.message, 'error');
             this.loading = false;
           }
         });
@@ -203,12 +233,37 @@ export class StudentFormComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error creating student:', error);
-            this.showAlert('Creation Failed', 'Error creating student. Please try again.', 'error');
+            this.showAlert('Creation Failed', error?.error?.message, 'error');
             this.loading = false;
           }
         });
       }
     }
+  }
+
+  private validateNicWithDobSimple(nic: string, dateOfBirth: Date): boolean {
+
+    const dobYear = new Date(dateOfBirth).getFullYear();
+    let nicYear = 0;
+
+    if (nic.length === 10) {
+      const year = nic.substring(0, 2);
+      const year2Digit = parseInt(year);
+
+      if (year2Digit >= 0 && year2Digit <= 25) {
+        nicYear = 2000 + year2Digit;
+      } else {
+        nicYear = 1900 + year2Digit;
+      }
+
+    } else if (nic.length === 12) {
+      nicYear = parseInt(nic.substring(0, 4));
+
+    } else {
+      return true;
+    }
+
+    return nicYear === dobYear;
   }
 
   onCancel(): void {

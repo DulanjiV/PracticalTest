@@ -87,5 +87,12 @@ namespace StudentRegistration.Api.Data.Repositories
                 _ => descending ? query.OrderByDescending(s => s.FirstName) : query.OrderBy(s => s.FirstName)
             };
         }
+
+        public async Task<bool> EmailExistsAsync(string email, int? excludeId = null)
+        {
+            return await _context.Students.AnyAsync(s =>
+                s.Email.ToLower() == email.ToLower() &&
+                (!excludeId.HasValue || s.Id != excludeId.Value));
+        }
     }
 }
