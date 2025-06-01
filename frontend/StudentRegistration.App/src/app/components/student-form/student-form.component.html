@@ -2,6 +2,32 @@
 
 <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
   <mat-dialog-content>
+
+    <div class="image-upload-section">
+      <div class="image-upload-row">
+        <div class="image-preview" *ngIf="hasImage()">
+          <img [src]="imagePreviewUrl" alt="Profile" class="preview-image">
+          <button type="button" mat-icon-button class="remove-btn" (click)="removeImage()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="no-image" *ngIf="!hasImage()">
+          <mat-icon>person</mat-icon>
+        </div>
+
+        <div class="upload-info">
+          <span class="upload-label">Profile Photo</span>
+          <input type="file" id="fileInput" accept="image/*" (change)="onFileSelected($event)" style="display: none;">
+          <button type="button" mat-stroked-button (click)="triggerFileInput()" class="upload-btn">
+            <mat-icon>camera_alt</mat-icon>
+            Choose
+          </button>
+          <small class="file-info" *ngIf="getImageDisplayName()">{{getImageDisplayName()}}</small>
+          <small class="file-info" >Max size: 5MB. Formats: JPEG, PNG, GIF</small>
+        </div>
+      </div>
+    </div>
+
     <div class="form-row">
       <mat-form-field appearance="outline" class="half-width">
         <mat-label>First Name</mat-label>
@@ -37,25 +63,25 @@
         </mat-error>
       </mat-form-field>
     </div>
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" required>
+        <mat-error *ngIf="studentForm.get('email')?.invalid">
+          Email is required
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" type="email" required>
-      <mat-error *ngIf="studentForm.get('email')?.invalid">
-        Email is required
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Date of Birth</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="studentForm.get('dateOfBirth')?.invalid">
-        Date of Birth is required
-      </mat-error>
-    </mat-form-field>
-
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Date of Birth</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="studentForm.get('dateOfBirth')?.invalid">
+          Date of Birth is required
+        </mat-error>
+      </mat-form-field>
+    </div>
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Address</mat-label>
       <textarea matInput formControlName="address" rows="3"></textarea>

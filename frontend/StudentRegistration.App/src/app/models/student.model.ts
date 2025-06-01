@@ -7,6 +7,8 @@ export interface Student {
   nic: string;
   dateOfBirth: Date;
   address: string;
+  profileImageBase64?: string;
+  imageContentType?: string;
 }
 
 export interface CreateStudentDto {
@@ -17,6 +19,8 @@ export interface CreateStudentDto {
   nic: string;
   dateOfBirth: Date;
   address: string;
+  profileImageBase64?: string;
+  imageContentType?: string;
 }
 
 export interface UpdateStudentDto {
@@ -27,6 +31,8 @@ export interface UpdateStudentDto {
   nic: string;
   dateOfBirth: Date;
   address: string;
+  profileImageBase64?: string;
+  imageContentType?: string;
 }
 
 export interface PagedResultDto<T> {

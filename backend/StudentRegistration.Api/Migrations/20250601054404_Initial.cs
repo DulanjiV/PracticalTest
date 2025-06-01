@@ -23,7 +23,9 @@ namespace StudentRegistration.Api.Migrations
                     Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     NIC = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    ProfileImage = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ImageContentType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {

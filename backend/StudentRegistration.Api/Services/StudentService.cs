@@ -50,6 +50,19 @@ namespace StudentRegistration.Api.Services
                 Address = createStudentDto.Address,
             };
 
+            if (!string.IsNullOrEmpty(createStudentDto.ProfileImageBase64))
+            {
+                try
+                {
+                    student.ProfileImage = Convert.FromBase64String(createStudentDto.ProfileImageBase64);
+                    student.ImageContentType = createStudentDto.ImageContentType;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error processing image: " + ex.Message);
+                }
+            }
+
             return await _repository.CreateAsync(student);
         }
 
@@ -68,6 +81,24 @@ namespace StudentRegistration.Api.Services
             existingStudent.NIC = updateStudentDto.NIC;
             existingStudent.DateOfBirth = updateStudentDto.DateOfBirth;
             existingStudent.Address = updateStudentDto.Address;
+
+            if (!string.IsNullOrEmpty(updateStudentDto.ProfileImageBase64))
+            {
+                try
+                {
+                    existingStudent.ProfileImage = Convert.FromBase64String(updateStudentDto.ProfileImageBase64);
+                    existingStudent.ImageContentType = updateStudentDto.ImageContentType;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error processing image: " + ex.Message);
+                }
+            }
+            else if (updateStudentDto.ProfileImageBase64 == "")
+            {
+                existingStudent.ProfileImage = null;
+                existingStudent.ImageContentType = null;
+            }
 
             return await _repository.UpdateAsync(existingStudent);
         }

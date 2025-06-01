@@ -5,6 +5,7 @@ namespace StudentRegistration.Api.Models.Entities
 {
     public class Student
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]
@@ -32,6 +33,23 @@ namespace StudentRegistration.Api.Models.Entities
         public DateTime DateOfBirth { get; set; }
 
         [MaxLength(500)]
-        public string Address { get; set; } = string.Empty;
+        public string? Address { get; set; } = string.Empty;
+
+        public byte[]? ProfileImage { get; set; }
+
+        [MaxLength(100)]
+        public string? ImageContentType { get; set; }
+
+        public string? ProfileImageBase64
+        {
+            get
+            {
+                if (ProfileImage != null && ProfileImage.Length > 0)
+                {
+                    return Convert.ToBase64String(ProfileImage);
+                }
+                return null;
+            }
+        }
     }
 }

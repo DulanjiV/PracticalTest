@@ -78,6 +78,19 @@
               <td mat-cell *matCellDef="let student">{{student.nic}}</td>
             </ng-container>
 
+            <ng-container matColumnDef="profileImage">
+              <th mat-header-cell *matHeaderCellDef class="image-column">Image</th>
+              <td mat-cell *matCellDef="let student" class="image-column">
+                <div class="profile-image-container">
+                  <img *ngIf="hasProfileImage(student)" [src]="getStudentImageUrl(student)"
+                    alt="{{student.firstName}} {{student.lastName}}" class="profile-image-table">
+                  <div *ngIf="!hasProfileImage(student)" class="no-image-placeholder">
+                    <mat-icon>person</mat-icon>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let student; columns: displayedColumns; let i = index"
               (click)="selectStudent(student, i)" [class.selected-row]="isRowSelected(student)" class="student-row">
@@ -108,7 +121,11 @@
         </mat-card-header>
         <mat-card-content>
           <div class="student-avatar">
-            <mat-icon class="avatar-icon">person</mat-icon>
+            <img *ngIf="hasProfileImage(selectedStudent)" [src]="getStudentImageUrl(selectedStudent)"
+              alt="Profile Photo" class="profile-image-detail">
+            <div *ngIf="!hasProfileImage(selectedStudent)" class="avatar-placeholder">
+              <mat-icon class="avatar-icon">person</mat-icon>
+            </div>
           </div>
           <div class="detail-row">
             <strong>Name:</strong>

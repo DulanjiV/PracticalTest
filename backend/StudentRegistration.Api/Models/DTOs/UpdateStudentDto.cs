@@ -30,5 +30,9 @@ namespace StudentRegistration.Api.Models.DTOs
 
         [MaxLength(500)]
         public string Address { get; set; } = string.Empty;
+
+        public string? ProfileImageBase64 { get; set; }
+
+        public string? ImageContentType { get; set; }
     }
 }

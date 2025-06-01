@@ -12,7 +12,7 @@ using StudentRegistration.Api.Data.Context;
 namespace StudentRegistration.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250530121013_Initial")]
+    [Migration("20250601054404_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -34,7 +34,6 @@ namespace StudentRegistration.Api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -48,6 +47,10 @@ namespace StudentRegistration.Api.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ImageContentType")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -65,6 +68,9 @@ namespace StudentRegistration.Api.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<byte[]>("ProfileImage")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 

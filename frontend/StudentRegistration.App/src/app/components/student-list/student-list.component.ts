@@ -39,7 +39,7 @@ export class StudentListComponent implements OnInit {
   students: Student[] = [];
   selectedStudent: Student | null = null;
   selectedStudentIndex: number = -1;
-  displayedColumns: string[] = ['firstName', 'lastName', 'mobile', 'email', 'nic'];
+  displayedColumns: string[] = ['firstName', 'lastName', 'mobile', 'email', 'nic', 'profileImage'];
   searchTerm: string = '';
   loading: boolean = false;
 
@@ -135,7 +135,7 @@ export class StudentListComponent implements OnInit {
 
   addStudent(): void {
     const dialogRef = this.dialog.open(StudentFormComponent, {
-      width: '500px',
+      width: '700px',
       data: { student: null, isEdit: false }
     });
 
@@ -151,7 +151,7 @@ export class StudentListComponent implements OnInit {
     if (!this.selectedStudent) return;
 
     const dialogRef = this.dialog.open(StudentFormComponent, {
-      width: '500px',
+      width: '700px',
       data: { student: this.selectedStudent, isEdit: true }
     });
 
@@ -161,7 +161,7 @@ export class StudentListComponent implements OnInit {
         const index = this.students.findIndex(s => s.id === result.id);
         if (index !== -1) {
           this.students[index] = result;
-          this.selectedStudentIndex = index; 
+          this.selectedStudentIndex = index;
         }
         this.students = [...this.students];
         this.showAlert('Success', 'Student updated successfully!', 'success');
@@ -212,7 +212,7 @@ export class StudentListComponent implements OnInit {
     });
   }
 
-isRowSelected(student: Student): boolean {
+  isRowSelected(student: Student): boolean {
     return this.selectedStudent?.id === student.id;
   }
 
@@ -230,5 +230,16 @@ isRowSelected(student: Student): boolean {
   getSortIcon(column: string): string {
     if (this.sortBy !== column) return 'unfold_more';
     return this.sortDescending ? 'keyboard_arrow_down' : 'keyboard_arrow_up';
+  }
+
+  getStudentImageUrl(student: Student): string {
+    if (student.profileImageBase64 && student.imageContentType) {
+      return `data:${student.imageContentType};base64,${student.profileImageBase64}`;
+    }
+    return '';
+  }
+
+  hasProfileImage(student: Student): boolean {
+    return !!(student.profileImageBase64 && student.imageContentType);
   }
 }
