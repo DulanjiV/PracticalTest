@@ -102,7 +102,7 @@ namespace StudentRegistration.Api.Services
                     throw new Exception("Error processing image: " + ex.Message);
                 }
             }
-            else if (updateStudentDto.ProfileImageBase64 == "")
+            else if (updateStudentDto.ProfileImageBase64 == "" || updateStudentDto.ProfileImageBase64 == null)
             {
                 existingStudent.ProfileImage = null;
                 existingStudent.ImageContentType = null;
