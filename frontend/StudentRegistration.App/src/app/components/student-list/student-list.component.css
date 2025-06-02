@@ -178,6 +178,12 @@ mat-card-header {
   text-align: left;
   font-weight: 500;
   
+  span {
+    flex: 1;
+    margin-right: 8px; 
+    padding-right: 10px;
+  }
+  
   mat-icon {
     position: absolute;
     right: 4px;
